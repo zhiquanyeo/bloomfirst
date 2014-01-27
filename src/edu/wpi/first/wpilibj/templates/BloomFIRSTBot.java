@@ -8,7 +8,9 @@
 package edu.wpi.first.wpilibj.templates;
 
 
+import edu.wpi.first.wpilibj.ADXL345_I2C;
 import edu.wpi.first.wpilibj.AnalogChannel;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SimpleRobot;
@@ -36,6 +38,12 @@ public class BloomFIRSTBot extends SimpleRobot {
     
     //Rangefinder
     private AnalogChannel rangefinder = new AnalogChannel(7);
+    
+    //Simple limit switch
+    private DigitalInput limitSwitch = new DigitalInput(1);
+    
+    //Accelerometer
+    private ADXL345_I2C accelerometer = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G);
     
     /*==== Human Input Components ====
     
@@ -74,6 +82,13 @@ public class BloomFIRSTBot extends SimpleRobot {
      */
     public void operatorControl() {
         drivetrain.setSafetyEnabled(true);
+        double accelX, accelY, accelZ;
+        while (isEnabled() && isOperatorControl()) {
+            //1) Sense
+            accelX = accelerometer.getAcceleration(ADXL345_I2C.Axes.kX);
+            accelY = accelerometer.getAcceleration(ADXL345_I2C.Axes.kY);
+            accelZ = accelerometer.getAcceleration(ADXL345_I2C.Axes.kZ);
+        }
     }
     
     /**
