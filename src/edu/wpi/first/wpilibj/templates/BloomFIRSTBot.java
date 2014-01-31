@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SimpleRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -64,7 +66,10 @@ public class BloomFIRSTBot extends SimpleRobot {
         
         while (isEnabled() && isAutonomous()) {
             //drive forward until we are 50cm (500mm) away from a target then backup and spin around
-            if (getRangefinderDistance() < 500) {
+            double range = getRangefinderDistance();
+            SmartDashboard.putNumber("Range", range);
+            SmartDashboard.putBoolean("Limit Switch", limitSwitch.get());
+            if (range < 500) {
                 //Backup for 2 seconds
                 drivetrain.drive(-0.1, 0);
                 Timer.delay(2.0);
@@ -85,9 +90,13 @@ public class BloomFIRSTBot extends SimpleRobot {
         double accelX, accelY, accelZ;
         while (isEnabled() && isOperatorControl()) {
             //1) Sense
+            SmartDashboard.putNumber("Range", getRangefinderDistance());
+            SmartDashboard.putBoolean("Limit Switch", limitSwitch.get());
             accelX = accelerometer.getAcceleration(ADXL345_I2C.Axes.kX);
             accelY = accelerometer.getAcceleration(ADXL345_I2C.Axes.kY);
             accelZ = accelerometer.getAcceleration(ADXL345_I2C.Axes.kZ);
+            String accelStr = accelX + ":" + accelY + ":" + accelZ;
+            SmartDashboard.putString("Acceleration (x:y:z)", accelStr);
         }
     }
     
