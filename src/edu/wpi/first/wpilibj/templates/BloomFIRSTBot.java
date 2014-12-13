@@ -59,7 +59,10 @@ public class BloomFIRSTBot extends SimpleRobot {
             drivetrain.drive(speed, 0);
         }
     }
-
+    
+    public double getDistance() {
+        return rangefinder.getVoltage() * 1000 / 0.977;
+    }
     /**
      * This function is called once each time the robot enters operator control.
      */
